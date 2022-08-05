@@ -4,6 +4,7 @@ export default function LoggedInRouter() {
   const onClick = () => {
     isLoggedInVar(false);
   };
+
   return (
     <div>
       <h1 className='text-5xl font-bold'>Logged In</h1>
