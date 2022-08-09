@@ -1,9 +1,10 @@
 import { gql, useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { FormError } from '../components/form-error';
+import { useLoginMutation } from '../gql';
 
 const LOGIN_MUTATION = gql`
-  mutation PotatoMutation($email: String!, $password: String!) {
+  mutation Login($email: String!, $password: String!) {
     login(input: { email: $email, password: $password }) {
       ok
       error
@@ -20,7 +21,7 @@ interface ILoginForm {
 export default function Login() {
   const { register, handleSubmit, formState, clearErrors } =
     useForm<ILoginForm>({ mode: 'onBlur' });
-  const [loginMutation, { data, loading, error }] = useMutation(LOGIN_MUTATION);
+  const [loginMutation, { data, loading, error }] = useLoginMutation();
   const onSubmit = (data: ILoginForm) => {
     const { email, password } = data;
     loginMutation({
@@ -30,6 +31,7 @@ export default function Login() {
       },
     });
   };
+
   return (
     <div className='h-screen flex items-center justify-center bg-gray-800'>
       <div className='bg-white w-full max-w-sm pt-6 pb-7 rounded-lg text-center'>
