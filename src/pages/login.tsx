@@ -1,17 +1,6 @@
-import { gql, useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { FormError } from '../components/form-error';
-import { useLoginMutation } from '../gql';
-
-const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(input: { email: $email, password: $password }) {
-      ok
-      error
-      token
-    }
-  }
-`;
+import { LoginMutation, useLoginMutation } from '../graphql/__generated__';
 
 interface ILoginForm {
   email: string;
@@ -21,13 +10,32 @@ interface ILoginForm {
 export default function Login() {
   const { register, handleSubmit, formState, clearErrors } =
     useForm<ILoginForm>({ mode: 'onBlur' });
-  const [loginMutation, { data, loading, error }] = useLoginMutation();
-  const onSubmit = (data: ILoginForm) => {
-    const { email, password } = data;
+  const onCompleted = (data: LoginMutation) => {
+    const {
+      login: { ok, token },
+    } = data;
+    if (ok) {
+      console.log(token);
+    }
+  };
+  const [
+    loginMutation,
+    {
+      data: loginMutationResult,
+      loading: loginMutationLoading,
+      error: loginMutationError,
+    },
+  ] = useLoginMutation({
+    onCompleted,
+  });
+  const onSubmit = ({ email, password }: ILoginForm) => {
+    if (loginMutationLoading || loginMutationError) return;
     loginMutation({
       variables: {
-        email,
-        password,
+        loginInput: {
+          email,
+          password,
+        },
       },
     });
   };
@@ -72,7 +80,12 @@ export default function Login() {
           {formState.errors.password?.message && (
             <FormError errorMessage={formState.errors.password?.message} />
           )}
-          <button className='button'>Log In</button>
+          <button className='button'>
+            {loginMutationLoading ? 'Loading...' : 'Log In'}
+          </button>
+          {loginMutationResult?.login.error && (
+            <FormError errorMessage={loginMutationResult.login.error} />
+          )}
         </form>
       </div>
     </div>

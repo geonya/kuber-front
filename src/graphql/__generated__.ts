@@ -567,8 +567,7 @@ export type VerifyEmailOutput = {
 };
 
 export type LoginMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
+  loginInput: LoginInput;
 }>;
 
 
@@ -576,8 +575,8 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 
 
 export const LoginDocument = gql`
-    mutation Login($email: String!, $password: String!) {
-  login(input: {email: $email, password: $password}) {
+    mutation Login($loginInput: LoginInput!) {
+  login(input: $loginInput) {
     ok
     error
     token
@@ -599,8 +598,7 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
+ *      loginInput: // value for 'loginInput'
  *   },
  * });
  */
