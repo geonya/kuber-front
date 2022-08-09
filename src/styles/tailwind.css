@@ -2,12 +2,12 @@
 @tailwind components;
 
 .input {
-  @apply bg-gray-100 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 py-3 px-5 rounded-lg;
+  @apply bg-gray-100 shadow-inner focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 py-2.5 px-5 rounded-lg  transition-colors;
 }
 .button {
-  @apply bg-gray-800 text-white text-lg py-3 px-5 rounded-lg shadow-md focus:outline-none hover:opacity-90;
+  @apply text-white text-lg font-medium py-2.5 px-5 rounded-lg shadow-md focus:outline-none transition-colors;
 }
 .form__error {
-  @apply text-red-400 text-sm;
+  @apply w-full text-center text-red-400 text-sm;
 }
 @tailwind utilities;

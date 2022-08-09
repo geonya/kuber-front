@@ -1,21 +1,36 @@
 import { useForm } from 'react-hook-form';
+import { Link, useLocation } from 'react-router-dom';
+import FormButton from '../components/form-button';
 import { FormError } from '../components/form-error';
 import { LoginMutation, useLoginMutation } from '../graphql/__generated__';
+import kuberLogo from '../images/logo.svg';
+import Helmet from 'react-helmet';
+import { isLoggedInVar } from '../apollo';
 
 interface ILoginForm {
   email: string;
   password: string;
 }
 
+export interface ILoginState extends ILoginForm {}
+
 export default function Login() {
+  const loginState = useLocation()?.state as ILoginState;
   const { register, handleSubmit, formState, clearErrors } =
-    useForm<ILoginForm>({ mode: 'onBlur' });
+    useForm<ILoginForm>({
+      mode: 'onBlur',
+      defaultValues: {
+        email: loginState?.email || '',
+        password: loginState?.password || '',
+      },
+    });
   const onCompleted = (data: LoginMutation) => {
     const {
       login: { ok, token },
     } = data;
     if (ok) {
       console.log(token);
+      isLoggedInVar(true);
     }
   };
   const [
@@ -41,12 +56,18 @@ export default function Login() {
   };
 
   return (
-    <div className='h-screen flex items-center justify-center bg-gray-800'>
-      <div className='bg-white w-full max-w-sm pt-6 pb-7 rounded-lg text-center'>
-        <h3 className='font-bold text-2xl text-gray-800'>Log In</h3>
+    <div className='h-screen flex items-center flex-col mt-10 lg:mt-28'>
+      <Helmet>
+        <title>Login | Kuber Eats</title>
+      </Helmet>
+      <div className='w-full max-w-screen-sm flex flex-col items-center px-5'>
+        <img src={kuberLogo} className='w-60 mb-10' alt='kuber-logo__svg' />
+        <h4 className='w-full text-left text-xl font-medium'>
+          Let's Get Started!
+        </h4>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className='flex flex-col mt-5 px-5 space-y-3'
+          className='w-full flex flex-col mt-5 space-y-3'
         >
           <input
             {...register('email', {
@@ -80,13 +101,23 @@ export default function Login() {
           {formState.errors.password?.message && (
             <FormError errorMessage={formState.errors.password?.message} />
           )}
-          <button className='button'>
-            {loginMutationLoading ? 'Loading...' : 'Log In'}
-          </button>
+          <FormButton
+            loading={loginMutationLoading}
+            isValid={formState.isValid}
+            actionText='Log In'
+          />
           {loginMutationResult?.login.error && (
             <FormError errorMessage={loginMutationResult.login.error} />
           )}
         </form>
+        <div className='mt-5'>
+          <span>New to Kuber ?</span>{' '}
+          <Link to={'/create-account'}>
+            <span className='cursor-pointer text-green-500 hover:underline underline-offset-4'>
+              Create Account
+            </span>
+          </Link>
+        </div>
       </div>
     </div>
   );

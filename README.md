@@ -19,5 +19,10 @@
 
 ### Login Page
 
-- Apollo Tooling : https://github.com/apollographql/apollo-tooling
+- Using Code Gen : https://www.graphql-code-generator.com/
 - DTO is source of everything
+- LoginMutation
+
+### Create Account Page
+
+- Form Validation
