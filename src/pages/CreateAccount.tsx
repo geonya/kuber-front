@@ -1,11 +1,11 @@
-import { Helmet } from 'react-helmet';
 import kuberLogo from '../images/logo.svg';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import FormButton from '../components/form-button';
-import { FormError } from '../components/form-error';
+import FormButton from '../components/FormButton';
+import { FormError } from '../components/FormError';
 import { useCreateAccountMutation, UserRole } from '../graphql/__generated__';
-import { ILoginState } from './login';
+import { ILoginState } from './Login';
+import { Helmet } from 'react-helmet-async';
 
 interface ICreateAccountForm {
   email: string;
@@ -67,7 +67,7 @@ export default function CreateAccount() {
       <div className='w-full max-w-screen-sm flex flex-col items-center px-5'>
         <img src={kuberLogo} className='w-60 mb-10' alt='kuber-logo__svg' />
         <h4 className='w-full text-left text-xl font-medium'>
-          Hello, Awesome people! 🚀
+          Hello, Awesome people 🙋🏻‍♂️
         </h4>
         <form
           onSubmit={handleSubmit(onSubmit)}

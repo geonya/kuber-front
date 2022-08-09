@@ -6,11 +6,7 @@ interface FormButtonProps {
 
 const FormButton = ({ isValid, loading, actionText }: FormButtonProps) => (
   <button
-    className={`button ${
-      isValid
-        ? 'bg-green-500 hover:bg-green-700'
-        : 'bg-gray-400 hover:bg-gray-700'
-    }`}
+    className={`${isValid ? 'button__green--hover' : 'button__gray--hover'}`}
     disabled={isValid ? false : true}
   >
     {loading ? 'Loading...' : actionText}

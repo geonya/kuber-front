@@ -1,11 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { Link, useLocation } from 'react-router-dom';
-import FormButton from '../components/form-button';
-import { FormError } from '../components/form-error';
+import FormButton from '../components/FormButton';
+import { FormError } from '../components/FormError';
 import { LoginMutation, useLoginMutation } from '../graphql/__generated__';
 import kuberLogo from '../images/logo.svg';
-import Helmet from 'react-helmet';
-import { isLoggedInVar } from '../apollo';
+import { isLoggedInVar, authTokenVar } from '../apollo';
+import { LOCALSTORAGE_TOKEN } from '../constants';
+import { Helmet } from 'react-helmet-async';
 
 interface ILoginForm {
   email: string;
@@ -28,8 +29,9 @@ export default function Login() {
     const {
       login: { ok, token },
     } = data;
-    if (ok) {
-      console.log(token);
+    if (ok && token) {
+      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
+      authTokenVar(token);
       isLoggedInVar(true);
     }
   };
@@ -44,7 +46,7 @@ export default function Login() {
     onCompleted,
   });
   const onSubmit = ({ email, password }: ILoginForm) => {
-    if (loginMutationLoading || loginMutationError) return;
+    if (loginMutationLoading) return;
     loginMutation({
       variables: {
         loginInput: {
@@ -54,7 +56,6 @@ export default function Login() {
       },
     });
   };
-
   return (
     <div className='h-screen flex items-center flex-col mt-10 lg:mt-28'>
       <Helmet>
@@ -63,7 +64,7 @@ export default function Login() {
       <div className='w-full max-w-screen-sm flex flex-col items-center px-5'>
         <img src={kuberLogo} className='w-60 mb-10' alt='kuber-logo__svg' />
         <h4 className='w-full text-left text-xl font-medium'>
-          Let's Get Started!
+          Let's Get Started 🚀
         </h4>
         <form
           onSubmit={handleSubmit(onSubmit)}

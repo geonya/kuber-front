@@ -1,6 +1,14 @@
 import { gql } from '@apollo/client';
 
 gql`
+  query Me {
+    me {
+      id
+      email
+      role
+      verified
+    }
+  }
   mutation CreateAccount($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
       ok

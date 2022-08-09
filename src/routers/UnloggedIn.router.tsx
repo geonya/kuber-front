@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
-import CreateAccount from '../pages/create-account';
-import Login from '../pages/login';
+import CreateAccount from '../pages/CreateAccount';
+import Login from '../pages/Login';
 
 export default function UnLoggedInRouter() {
   return (

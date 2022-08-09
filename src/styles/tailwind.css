@@ -10,4 +10,10 @@
 .form__error {
   @apply w-full text-center text-red-400 text-sm;
 }
+.button__green--hover {
+  @apply button bg-green-500 hover:bg-green-700;
+}
+.button__gray--hover {
+  @apply button bg-gray-500 hover:bg-gray-700;
+}
 @tailwind utilities;
