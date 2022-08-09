@@ -46,7 +46,7 @@ export default function Login() {
     onCompleted,
   });
   const onSubmit = ({ email, password }: ILoginForm) => {
-    if (loginMutationLoading) return;
+    if (loginMutationLoading || loginMutationError) return;
     loginMutation({
       variables: {
         loginInput: {

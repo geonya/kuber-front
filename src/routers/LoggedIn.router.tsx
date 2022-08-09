@@ -1,7 +1,7 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { isLoggedInVar } from '../apollo';
-import { LOCALSTORAGE_TOKEN } from '../constants';
-import { useMeQuery, UserRole } from '../graphql/__generated__';
+import { Route, Routes } from 'react-router-dom';
+import Header from '../components/Header';
+import { UserRole } from '../graphql/__generated__';
+import useMe from '../hooks/userMe';
 import NotFound from '../pages/404';
 import Restaurant from '../pages/client/Restaurant';
 
@@ -22,12 +22,7 @@ const RoleRoute = (role: UserRole) => {
 };
 
 export default function LoggedInRouter() {
-  const logout = () => {
-    isLoggedInVar(false);
-    localStorage.removeItem(LOCALSTORAGE_TOKEN);
-  };
-
-  const { data: meData, loading: meLoading, error: meError } = useMeQuery();
+  const { data: meData, loading: meLoading, error: meError } = useMe();
   if (!meData || meLoading || meError) {
     return (
       <div className='h-screen flex justify-center items-center'>
@@ -36,9 +31,12 @@ export default function LoggedInRouter() {
     );
   }
   return (
-    <Routes>
-      <Route path='/' element={RoleRoute(meData.me.role) || <NotFound />} />
-      <Route path='*' element={<NotFound />} />
-    </Routes>
+    <>
+      <Header />
+      <Routes>
+        <Route path='/' element={RoleRoute(meData.me.role) || <NotFound />} />
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+    </>
   );
 }

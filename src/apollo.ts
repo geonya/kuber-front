@@ -12,6 +12,11 @@ const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar(token);
 
+// const logout = () => {
+//   isLoggedInVar(false);
+//   localStorage.removeItem(LOCALSTORAGE_TOKEN);
+// };
+
 const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' });
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers }: { headers: any }) => ({
