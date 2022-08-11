@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 gql`
   query Me {
@@ -22,4 +22,10 @@ gql`
       token
     }
   }
-`;
+  mutation VerifyEmail($input: VerifyEmailInput!) {
+    verifyEmail(input: $input) {
+      ok
+      error
+    }
+  }
+`
