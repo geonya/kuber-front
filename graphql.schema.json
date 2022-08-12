@@ -2550,7 +2550,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "VerifyEmailInput",
+                    "name": "VerifyEmailInputType",
                     "ofType": null
                   }
                 },
@@ -4344,7 +4344,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "VerifyEmailInput",
+        "name": "VerifyEmailInputType",
         "description": null,
         "fields": null,
         "inputFields": [
