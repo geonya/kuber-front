@@ -13,7 +13,7 @@ export default function Header() {
 			)}
 			<header className="py-4 px-5 xl:px-0">
 				<div className="w-full max-w-screen-xl mx-auto flex items-center justify-between">
-					{logoSymbol(121, 21)}
+					<Link to="/">{logoSymbol(121, 21)}</Link>
 					<span className="text-xs cursor-pointer">
 						<Link to="/edit-profile">{userSymbol(48, 48)}</Link>
 						{data?.me.email}
