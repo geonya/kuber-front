@@ -1,3 +1,4 @@
+import { gql, useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 import FormButton from '../../components/FormButton'
 import { FormError } from '../../components/FormError'
@@ -11,8 +12,9 @@ interface IFormProps {
 }
 
 export default function EditProfile() {
-	const { data: userData } = useMe()
-	const { register, handleSubmit, formState, clearErrors } =
+	const client = useApolloClient()
+	const { data: userData, refetch } = useMe()
+	const { register, handleSubmit, formState, clearErrors, getValues } =
 		useForm<IFormProps>({
 			mode: 'onBlur',
 			defaultValues: {
@@ -22,20 +24,38 @@ export default function EditProfile() {
 		})
 	const [editProfile, { loading: EditProfileLoading }] = useEditProfileMutation(
 		{
-			onCompleted: (data) => {
-        if (data.editProfile.ok) {
-          // update cache
-        }
+			onCompleted: async (data) => {
+				if (data.editProfile.ok && userData?.me) {
+					const {
+						me: { email: prevEmail, id }
+					} = userData
+					const { email: newEmail } = getValues()
+					if (prevEmail !== newEmail) {
+						client.writeFragment({
+							id: `User:${id}`,
+							fragment: gql`
+								fragment EditedUser on User {
+									verified
+									email
+								}
+							`,
+							data: {
+								email: newEmail,
+								verified: false
+							}
+						})
+					}
+				}
 			}
 		}
 	)
-	const onSubmit = ({email, password}: IFormProps) => {
+	const onSubmit = ({ email, password }: IFormProps) => {
 		if (EditProfileLoading) return
 		editProfile({
 			variables: {
 				input: {
-          email,
-          ...(password && {password})
+					email,
+					...(password && {})
 				}
 			}
 		})
