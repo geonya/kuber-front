@@ -16,4 +16,7 @@
 .button__gray--hover {
   @apply button bg-gray-500 hover:bg-gray-700;
 }
+.container {
+  @apply max-w-screen-xl mx-auto;
+}
 @tailwind utilities;

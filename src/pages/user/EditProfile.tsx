@@ -1,4 +1,5 @@
 import { gql, useApolloClient } from '@apollo/client'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import FormButton from '../../components/FormButton'
 import { FormError } from '../../components/FormError'
@@ -62,6 +63,9 @@ export default function EditProfile() {
 	}
 	return (
 		<div className="mt-52 flex flex-col justify-center items-center">
+      <Helmet>
+        <title>Create Account | Kuber Eats</title>
+      </Helmet>
 			<Title title="Edit Profile" />
 			<form
 				className="w-full grid gap-3 mt-5 max-w-screen-sm"
