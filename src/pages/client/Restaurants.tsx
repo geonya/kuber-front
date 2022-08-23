@@ -1,15 +1,20 @@
-import React from 'react'
+import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import Restaurant from '../../components/Restaurant'
 import { useRestaurantsQuery } from '../../graphql/__generated__'
 
-export default function Restaurant() {
+export default function Restaurants() {
+  const [page, setPage] = useState(1)
   const { data, loading } = useRestaurantsQuery({
     variables: {
       restaurantsInput: {
-        page: 1,
+        page,
       },
     },
   })
+  const onNextPageClick = () => setPage((current) => current + 1)
+  const onPrevPageClick = () =>
+    setPage((current) => (current !== 1 ? current - 1 : 1))
   return (
     <>
       <Helmet>
@@ -26,7 +31,7 @@ export default function Restaurant() {
         {loading ? (
           <h1>Loading...</h1>
         ) : (
-          <div className='container mt-8'>
+          <div className='container mt-8 pb-20'>
             <div className='flex justify-around max-w-xs mx-auto cursor-pointer'>
               {data?.allCategories.categories?.map((category, i) => (
                 <div className='flex flex-col items-center group' key={i}>
@@ -42,20 +47,35 @@ export default function Restaurant() {
                 </div>
               ))}
             </div>
-            <div className='w-full mt-6 grid grid-cols-1 sm:grid-cols-3 gap-x-5 gap-y-7'>
-              {data?.restaurants.results?.map((restaurant) => (
-                <div className='space-y-3'>
-                  <div
-                    style={{ backgroundImage: `url(${restaurant.coverImg})` }}
-                    className='bg-cover bg-no-repeat py-28'
-                  />
-                  <h3 className='text-xl font-bold mb-2'>{restaurant.name}</h3>
-                  <div className='border-t border-gray-300 py-1' />
-                  <span className='text-gray-500'>
-                    {restaurant.category?.name}
-                  </span>
-                </div>
+            <div className='w-full mt-10 grid grid-cols-1 sm:grid-cols-3 gap-x-5 gap-y-7'>
+              {data?.restaurants.results?.map((restaurant, i) => (
+                <Restaurant key={i} {...restaurant} />
               ))}
+            </div>
+            <div className='grid grid-cols-3 items-center text-center max-w-sm mt-10 mx-auto'>
+              {page > 1 ? (
+                <button
+                  className='focus:outline-none font-medium text-2xl'
+                  onClick={onPrevPageClick}
+                >
+                  &larr;
+                </button>
+              ) : (
+                <div />
+              )}
+              <span>
+                Page {page} of {data?.restaurants.totalPages}
+              </span>
+              {page !== data?.restaurants.totalPages ? (
+                <button
+                  className='focus:outline-none font-medium text-2xl'
+                  onClick={onNextPageClick}
+                >
+                  &rarr;
+                </button>
+              ) : (
+                <div />
+              )}
             </div>
           </div>
         )}
