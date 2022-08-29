@@ -6,7 +6,7 @@ import Restaurant from '../../components/Restaurant'
 import { useRestaurantsQuery } from '../../graphql/__generated__'
 
 interface ISearchFormValues {
-  keyword: string
+  query: string
 }
 
 export default function Restaurants() {
@@ -23,10 +23,10 @@ export default function Restaurants() {
   const onPrevPageClick = () =>
     setPage((current) => (current !== 1 ? current - 1 : 1))
   const { register, handleSubmit } = useForm<ISearchFormValues>()
-  const onSearchFormValid = ({ keyword }: ISearchFormValues) => {
+  const onSearchFormValid = ({ query }: ISearchFormValues) => {
     navigate({
       pathname: `/search`,
-      search: `keyword=${keyword}`,
+      search: `query=${query}`,
     })
   }
 
@@ -41,7 +41,7 @@ export default function Restaurants() {
           className='bg-gray-800 w-full py-32 flex items-center justify-center'
         >
           <input
-            {...register('keyword', { required: true, minLength: 2 })}
+            {...register('query', { required: true, minLength: 2 })}
             className='input w-3/5 lg:w-4/12'
             type='search'
             placeholder='Search Restaurants...'

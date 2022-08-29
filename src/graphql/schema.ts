@@ -1,5 +1,18 @@
 import { gql } from '@apollo/client'
 
+const RESTAURANT_FRAGMENT = gql`
+  fragment RestaurantParts on Restaurant {
+    id
+    name
+    coverImg
+    address
+    isPromoted
+    category {
+      name
+    }
+  }
+`
+
 gql`
   query Me {
     me {
@@ -16,14 +29,7 @@ gql`
       totalPages
       totalResults
       results {
-        id
-        name
-        coverImg
-        address
-        isPromoted
-        category {
-          name
-        }
+       ...RestaurantParts
       }
     }
     allCategories {
@@ -37,7 +43,22 @@ gql`
         restaurantCount
       }
     }
+    ${RESTAURANT_FRAGMENT}
   }
+
+  query SearchRestaurant($input: SearchRestaurantInput!) {
+    searchRestaurant(input: $input) {
+      ok
+      error
+      totalPages
+      totalResults
+      restaurants {
+       ...RestaurantParts
+      }
+    }
+    ${RESTAURANT_FRAGMENT}
+  }
+
   mutation CreateAccount($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
       ok
