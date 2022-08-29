@@ -1,9 +1,16 @@
 import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import Restaurant from '../../components/Restaurant'
 import { useRestaurantsQuery } from '../../graphql/__generated__'
 
+interface ISearchFormValues {
+  keyword: string
+}
+
 export default function Restaurants() {
+  let navigate = useNavigate()
   const [page, setPage] = useState(1)
   const { data, loading } = useRestaurantsQuery({
     variables: {
@@ -15,15 +22,27 @@ export default function Restaurants() {
   const onNextPageClick = () => setPage((current) => current + 1)
   const onPrevPageClick = () =>
     setPage((current) => (current !== 1 ? current - 1 : 1))
+  const { register, handleSubmit } = useForm<ISearchFormValues>()
+  const onSearchFormValid = ({ keyword }: ISearchFormValues) => {
+    navigate({
+      pathname: `/search`,
+      search: `keyword=${keyword}`,
+    })
+  }
+
   return (
     <>
       <Helmet>
         <title>Restaurants | Kuber</title>
       </Helmet>
       <div>
-        <form className='bg-gray-800 w-full py-32 flex items-center justify-center'>
+        <form
+          onSubmit={handleSubmit(onSearchFormValid)}
+          className='bg-gray-800 w-full py-32 flex items-center justify-center'
+        >
           <input
-            className='input w-1/2 sm:w-4/12'
+            {...register('keyword', { required: true, minLength: 2 })}
+            className='input w-3/5 lg:w-4/12'
             type='search'
             placeholder='Search Restaurants...'
           />
@@ -31,7 +50,7 @@ export default function Restaurants() {
         {loading ? (
           <h1>Loading...</h1>
         ) : (
-          <div className='container mt-8 pb-20'>
+          <div className='container mt-8 pb-20 md:grid-cols-3'>
             <div className='flex justify-around max-w-xs mx-auto cursor-pointer'>
               {data?.allCategories.categories?.map((category, i) => (
                 <div className='flex flex-col items-center group' key={i}>

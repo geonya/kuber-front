@@ -4,6 +4,7 @@ import { UserRole } from '../graphql/__generated__'
 import useMe from '../hooks/userMe'
 import NotFound from '../pages/404'
 import Restaurants from '../pages/client/Restaurants'
+import Search from '../pages/client/Search'
 import ConfirmEmail from '../pages/user/ConfirmEmail'
 import EditProfile from '../pages/user/EditProfile'
 
@@ -39,6 +40,7 @@ export default function LoggedInRouter() {
         <Route path='/' element={RoleRoute(meData.me.role) || <NotFound />} />
         <Route path='/confirm' element={<ConfirmEmail />} />
         <Route path='/edit-profile' element={<EditProfile />} />
+        <Route path='/search' element={<Search />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>
